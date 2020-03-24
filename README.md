@@ -9,11 +9,22 @@ Imagine you had an Arduino that drove an LED, and you wanted to be able to contr
 
 You might write the following function into a myLED.ino sketch:
 
-`void LED_On(){
+`/*callable*/
+void LED_On(){
   digital_write(ledPin, HIGH)
  }`
 
-This would
+This would cause the precompiler to add a clause to a switch statement that parsed the contents of the serial buffer:
+
+`if (serialMesssage[1] == '0A') {
+    return LED_On();
+}`
+
+This would also cause the precompiler to build a C program that could be called like the following:
+
+`./myLed --comand='LED_On'`
+
+
 
 ## Work Process Flow
 When a new sketch is created, it is generated from an Arduion-PPT template that does things like instiate an instance of the Arduino-PPT class in the setup() function and then call it each time through the loop() function so that it can continuously poll the serial buffer for data. 
